@@ -1,20 +1,15 @@
 package com.example.windowinsetscontrollertest
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import android.view.Menu
-import android.view.MenuItem
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import com.example.windowinsetscontrollertest.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private var hideFlag = 0;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,37 +17,40 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbar)
+    }
 
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+    override fun onResume() {
+        super.onResume();
+        var controller = window?.insetsController;
+        binding.statusBarButton.setOnClickListener {
+            if (hideFlag and WindowInsets.Type.statusBars() > 0) {
+                hideFlag = hideFlag and WindowInsets.Type.statusBars().inv();
+                controller?.show(WindowInsets.Type.statusBars());
+            } else {
+                hideFlag = hideFlag or WindowInsets.Type.statusBars();
+                controller?.hide(WindowInsets.Type.statusBars());
+            }
         }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
+        binding.navigationBarButton.setOnClickListener {
+            if (hideFlag and WindowInsets.Type.navigationBars() > 0) {
+                hideFlag = hideFlag and WindowInsets.Type.navigationBars().inv();
+                controller?.show(WindowInsets.Type.navigationBars());
+            } else {
+                hideFlag = hideFlag or WindowInsets.Type.navigationBars();
+                controller?.hide(WindowInsets.Type.navigationBars());
+            }
         }
+        binding.systemBarButton.setOnClickListener {
+            controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE;
+            if (hideFlag and WindowInsets.Type.systemBars() > 0) {
+                hideFlag = hideFlag and WindowInsets.Type.systemBars().inv();
+                controller?.show(WindowInsets.Type.systemBars());
+            } else {
+                hideFlag = hideFlag or WindowInsets.Type.systemBars();
+                controller?.hide(WindowInsets.Type.systemBars());
+            }
+        }
+
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        return navController.navigateUp(appBarConfiguration)
-                || super.onSupportNavigateUp()
-    }
 }
