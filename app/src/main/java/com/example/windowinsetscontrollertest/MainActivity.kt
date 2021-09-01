@@ -17,10 +17,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-    }
-
-    override fun onResume() {
-        super.onResume();
         var controller = window?.insetsController;
         binding.statusBarButton.setOnClickListener {
             if (hideFlag and WindowInsets.Type.statusBars() > 0) {
@@ -50,7 +46,5 @@ class MainActivity : AppCompatActivity() {
                 controller?.hide(WindowInsets.Type.systemBars());
             }
         }
-
     }
-
 }
