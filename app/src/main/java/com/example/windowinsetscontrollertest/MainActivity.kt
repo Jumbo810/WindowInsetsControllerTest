@@ -3,7 +3,7 @@ package com.example.windowinsetscontrollertest
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.WindowInsets
-import android.view.WindowInsetsController
+import androidx.core.view.WindowInsetsControllerCompat
 import com.example.windowinsetscontrollertest.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -18,6 +18,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         var controller = window?.insetsController;
+        controller?.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_SWIPE;
+
         binding.statusBarButton.setOnClickListener {
             if (hideFlag and WindowInsets.Type.statusBars() > 0) {
                 hideFlag = hideFlag and WindowInsets.Type.statusBars().inv();
@@ -37,7 +39,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         binding.systemBarButton.setOnClickListener {
-            controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE;
+            controller?.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE;
             if (hideFlag and WindowInsets.Type.systemBars() > 0) {
                 hideFlag = hideFlag and WindowInsets.Type.systemBars().inv();
                 controller?.show(WindowInsets.Type.systemBars());
