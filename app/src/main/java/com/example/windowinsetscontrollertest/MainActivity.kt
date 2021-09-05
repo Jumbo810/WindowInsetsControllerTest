@@ -48,5 +48,12 @@ class MainActivity : AppCompatActivity() {
                 controller?.hide(WindowInsets.Type.systemBars());
             }
         }
+        binding.mainlayout.setOnClickListener {
+            var decorView = this.window.decorView;
+            controller?.show(WindowInsets.Type.navigationBars());
+            decorView.postDelayed({
+                controller?.hide(WindowInsets.Type.navigationBars());
+            }, 3000);
+        }
     }
 }
