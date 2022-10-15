@@ -1,0 +1,25 @@
+version: 2.1
+
+orbs:
+  android: circleci/android@1.0.3
+
+jobs:
+  Build-Release-Testing:
+    executor:
+      name: android/android-machine
+
+    steps:
+      - checkout
+
+      - run:
+          name: Assemble Release Build
+          command: |
+            ./gradlew assembleRelease
+
+      - store_artifacts:
+          path: app/build/outputs/apk/release
+
+workflows:
+  Build_WindowInsetsControllerTest:
+    jobs:
+      - Build-Release-Testing
